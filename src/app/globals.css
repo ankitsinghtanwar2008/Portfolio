@@ -1,6 +1,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,500&display=swap');
 @import 'tailwindcss';
+@keyframes spin { 100% { transform: rotate(360deg); } }
 
 /* =========================================
    01. DESIGN SYSTEM
@@ -644,16 +645,9 @@ img {
   object-position: center top;
   filter: grayscale(100%) contrast(1.08);
   opacity: 0.88;
-  -webkit-mask-image: radial-gradient(
-    ellipse at center,
-    black 40%,
-    transparent 75%
-  );
-  mask-image: radial-gradient(
-    ellipse at center,
-    black 40%,
-    transparent 75%
-  );
+  /* Updated mask limits to strictly hide the rectangular edges */
+  -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 68%);
+  mask-image: radial-gradient(circle at center, black 30%, transparent 68%);
 }
 
 .hero-portrait-overlay {
@@ -661,16 +655,28 @@ img {
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 40%,
-    #0b0b0a 90%
-  );
-  box-shadow: inset 0 0 100px 50px #0b0b0a;
+  /* Darkened overlay to perfectly match the section background */
+  background: radial-gradient(circle at center, transparent 35%, #0b0b0a 80%);
+  box-shadow: inset 0 0 120px 60px #0b0b0a;
 }
 
 .hero-portrait::after {
   display: none;
+}
+
+/* New CSS class for Top Left Caption */
+.portrait-caption {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 5;
+  color: #ffffff;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-family: var(--font-sans, sans-serif);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
 }
 
 .hero-bottom {
