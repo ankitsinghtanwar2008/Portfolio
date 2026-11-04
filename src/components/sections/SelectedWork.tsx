@@ -9,43 +9,82 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 export default function SelectedWork() {
   const ref = useRef<HTMLElement>(null);
 
+  const featuredProjects = projects.filter(
+    (project) => project.featured
+  );
+
+  const totalProjects = String(featuredProjects.length).padStart(2, "0");
+
   useEffect(() => {
     const section = ref.current;
     if (!section) return;
 
-    const ctx = gsap.context(() => {
-      const track = section.querySelector<HTMLElement>(".project-track");
+    const track = section.querySelector<HTMLElement>(".project-track");
+    if (!track) return;
 
-      if (
-        track &&
-        window.matchMedia("(min-width: 900px)").matches &&
-        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ) {
-        gsap.to(track, {
-          x: () => -(track.scrollWidth - window.innerWidth),
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            pin: true,
-            scrub: 1,
-            start: "top top",
-            end: () => `+=${Math.max(0, track.scrollWidth - window.innerWidth)}`,
-            invalidateOnRefresh: true,
-          },
+    const mediaQuery = window.matchMedia("(min-width: 900px)");
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
+
+    const ctx = gsap.context(() => {
+      const setupAnimation = () => {
+        ScrollTrigger.getAll().forEach((trigger) => {
+          if (trigger.trigger === section || trigger.trigger === track) {
+            trigger.kill();
+          }
         });
-      } else {
-        gsap.from(".project-panel", {
-          y: 35,
-          opacity: 0,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: track,
-            start: "top 85%",
-          },
-        });
-      }
+
+        gsap.set(track, { clearProps: "transform" });
+
+        if (
+          mediaQuery.matches &&
+          !reducedMotion.matches &&
+          track.scrollWidth > window.innerWidth
+        ) {
+          gsap.to(track, {
+            x: () => -(track.scrollWidth - window.innerWidth),
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              pin: true,
+              scrub: 1,
+              start: "top top",
+              end: () =>
+                `+=${track.scrollWidth - window.innerWidth}`,
+              invalidateOnRefresh: true,
+            },
+          });
+        } else {
+          gsap.from(".project-panel", {
+            y: 35,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: track,
+              start: "top 85%",
+            },
+          });
+        }
+
+        ScrollTrigger.refresh();
+      };
+
+      setupAnimation();
+
+      const handleResize = () => setupAnimation();
+
+      mediaQuery.addEventListener("change", handleResize);
+      reducedMotion.addEventListener("change", handleResize);
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        mediaQuery.removeEventListener("change", handleResize);
+        reducedMotion.removeEventListener("change", handleResize);
+        window.removeEventListener("resize", handleResize);
+      };
     }, section);
 
     return () => ctx.revert();
@@ -60,17 +99,19 @@ export default function SelectedWork() {
           <h2>
             Things I've
             <br />
-            <span className="serif-italic">put into the world.</span>
+            <span className="serif-italic">
+              put into the world.
+            </span>
           </h2>
         </div>
 
         <span className="work-instruction">
-          DRAG / SCROLL TO EXPLORE ↗
+          SCROLL TO EXPLORE ↗
         </span>
       </div>
 
       <div className="project-track">
-        {projects.filter((project) => project.featured).map((project) => (
+        {featuredProjects.map((project) => (
           <article
             className={`project-panel project-${project.slug}`}
             key={project.slug}
@@ -78,18 +119,25 @@ export default function SelectedWork() {
             <Link
               href={`/projects/${project.slug}`}
               className="project-visual"
+              aria-label={`View ${project.title} project`}
             >
               <div className="project-visual-top">
                 <span>AS / SELECTED WORK</span>
-                <span>{project.number} — 03</span>
+                <span>
+                  {project.number} — {totalProjects}
+                </span>
               </div>
 
               <div className="project-art-content">
-                <span className="art-small">{project.category}</span>
+                <span className="art-small">
+                  {project.category}
+                </span>
 
                 <strong
                   className={
-                    project.slug === "gharse" ? "serif-italic" : ""
+                    project.slug === "gharse"
+                      ? "serif-italic"
+                      : ""
                   }
                 >
                   {project.title}
@@ -120,7 +168,9 @@ export default function SelectedWork() {
 
                 <div className="project-stack">
                   {project.technologies.map((technology) => (
-                    <span key={technology}>{technology}</span>
+                    <span key={technology}>
+                      {technology}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -139,7 +189,7 @@ export default function SelectedWork() {
 
       <div className="work-footnote">
         <span>MORE EXPERIMENTS IN PROGRESS</span>
-        <span>03 / 03</span>
+        <span>{totalProjects} / {totalProjects}</span>
       </div>
     </section>
   );
