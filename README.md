@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ankit Singh — Creative Developer Portfolio
 
-## Getting Started
+Cinematic/editorial portfolio starter using Next.js 16, TypeScript, GSAP + ScrollTrigger and Lenis.
 
-First, run the development server:
+## Run locally
+
+Requires Node.js 20.9+.
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/app`: app router, metadata and global styling
+- `src/components/layout`: preloader, navigation, smooth scroll, footer
+- `src/components/animations`: cursor and reusable animation components
+- `src/components/sections`: hero, manifesto, about, expertise, projects, experience, contact
+- `src/data`: editable project, experience and personal content
+- `src/lib`: GSAP registration
+- `public/images`: add real profile and project images here
 
-## Learn More
+## Before publishing
 
-To learn more about Next.js, take a look at the following resources:
+1. Update email and social links in `src/data/site.ts`.
+2. Verify all experience, achievement and project statements.
+3. Replace generated CSS artwork in About/projects with your own genuine images/screenshots if available.
+4. Add your CV and a real profile photo if you want them displayed.
+5. Update project links and technology lists in `src/data/projects.ts`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The desktop project gallery uses a pinned horizontal GSAP sequence; on smaller screens it becomes a touch-friendly horizontal rail. Reduced-motion preferences are respected.
