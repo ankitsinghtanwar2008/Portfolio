@@ -2,10 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import { gsap } from "@/lib/gsap";
-import { site } from "@/data/site";
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -23,12 +22,10 @@ export default function Hero() {
       if (prefersReducedMotion) {
         gsap.set(
           [
-            ".hero-kicker",
             ".hero-title-line",
             ".hero-description",
             ".hero-actions",
             ".hero-portrait",
-            ".hero-topline",
           ],
           { opacity: 1, y: 0, clearProps: "transform" }
         );
@@ -44,20 +41,6 @@ export default function Hero() {
       });
 
       timeline
-        .from(".hero-topline", {
-          y: -15,
-          opacity: 0,
-          duration: 0.7,
-        })
-        .from(
-          ".hero-kicker",
-          {
-            y: 20,
-            opacity: 0,
-            duration: 0.7,
-          },
-          "-=0.3"
-        )
         .from(
           ".hero-title-line",
           {
@@ -67,8 +50,7 @@ export default function Hero() {
             stagger: 0.13,
             duration: 1.1,
             ease: "power4.out",
-          },
-          "-=0.3"
+          }
         )
         .from(
           ".hero-description, .hero-actions",
@@ -131,17 +113,7 @@ export default function Hero() {
     <section className="hero dark-section" id="top" ref={heroRef}>
       <div className="hero-grain" />
 
-      <div className="hero-topline">
-        <span>PORTFOLIO / 2026</span>
-        <span>{site.location}</span>
-      </div>
-
       <div className="hero-content">
-        <p className="eyebrow hero-kicker">
-          <i className="status-dot" />
-          {site.role}
-        </p>
-
         <div className="hero-main">
           <div className="hero-copy">
             <div className="hero-title-wrap">
@@ -185,8 +157,8 @@ export default function Hero() {
           <div className="hero-visual">
             <div className="hero-portrait">
               <Image
-                src="/images/profile/ankit.jpg"
-                alt="Ankit Singh — Developer and Founder"
+                src="/images/profile/ankit1.jpg"
+                alt="Ankit Singh"
                 fill
                 priority
                 sizes="(max-width: 768px) 85vw, 48vw"
@@ -197,7 +169,6 @@ export default function Hero() {
 
               <span className="portrait-caption">
                 ANKIT SINGH
-                <span>DEVELOPER / FOUNDER</span>
               </span>
             </div>
 
@@ -220,11 +191,6 @@ export default function Hero() {
         </div>
 
         <div className="hero-bottom">
-          <span className="hero-scroll">
-            <ArrowDown size={15} />
-            SCROLL TO EXPLORE
-          </span>
-
           <span className="hero-location">
             BASED IN INDIA · AVAILABLE WORLDWIDE
           </span>

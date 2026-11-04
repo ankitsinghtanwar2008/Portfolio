@@ -103,7 +103,7 @@ export default function About() {
       {/* Background portrait */}
       <div className="about-background">
         <Image
-          src="/images/profile/ankit.jpg"
+          src="/images/profile/ankit2.jpg"
           alt=""
           fill
           priority={false}

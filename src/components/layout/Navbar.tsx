@@ -1,21 +1,22 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { ArrowUpRight, Menu, X } from 'lucide-react';
-import { site } from '@/data/site';
-import { gsap } from '@/lib/gsap';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { ArrowUpRight, Menu, X } from "lucide-react";
+import { site } from "@/data/site";
+import { gsap } from "@/lib/gsap";
 
 const navItems = [
-  { label: 'ABOUT', href: '#about' },
-  { label: 'WORK', href: '#work' },
-  { label: 'EXPERIENCE', href: '#experience' },
+  { label: "ABOUT", href: "#about" },
+  { label: "WORK", href: "#work" },
+  { label: "EXPERIENCE", href: "#experience" },
+  { label: "CONTACT", href: "#contact" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('');
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,7 +26,7 @@ export default function Navbar() {
         .map((item) => document.querySelector(item.href))
         .filter(Boolean);
 
-      let current = '';
+      let current = "";
 
       sections.forEach((section) => {
         const rect = section!.getBoundingClientRect();
@@ -39,30 +40,30 @@ export default function Navbar() {
     };
 
     handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     const ctx = gsap.context(() => {
-      gsap.from('.site-nav > *', {
+      gsap.from(".site-nav > *", {
         y: -18,
         opacity: 0,
         duration: 0.8,
         stagger: 0.12,
-        ease: 'power3.out',
+        ease: "power3.out",
         delay: 0.5,
       });
     });
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
       ctx.revert();
     };
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    document.body.style.overflow = menuOpen ? "hidden" : "";
 
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [menuOpen]);
 
@@ -70,7 +71,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className={`site-nav ${scrolled ? 'nav-scrolled' : ''}`}>
+      <header className={`site-nav ${scrolled ? "nav-scrolled" : ""}`}>
         <Link href="#top" className="nav-brand" onClick={closeMenu}>
           AS<span>.</span>
         </Link>
@@ -80,28 +81,33 @@ export default function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className={activeSection === item.href ? 'active' : ''}
+              className={activeSection === item.href ? "active" : ""}
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <a className="nav-contact" href={`mailto:${site.email}`}>
-          LET&apos;S TALK <ArrowUpRight size={14} />
-        </a>
+        <div className="nav-contact-wrapper">
+          <a className="nav-contact" href={`mailto:${site.email}`}>
+            LET&apos;S TALK <ArrowUpRight size={14} />
+          </a>
+          <div className="nav-contact-tooltip">
+            Click to open your email client, or navigate to the inquiry section to send a direct message.
+          </div>
+        </div>
 
         <button
           className="nav-menu-toggle"
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
         >
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </header>
 
-      <div className={`mobile-menu ${menuOpen ? 'mobile-menu-open' : ''}`}>
+      <div className={`mobile-menu ${menuOpen ? "mobile-menu-open" : ""}`}>
         <div className="mobile-menu-inner">
           <span className="mobile-menu-label">NAVIGATION / 2026</span>
 
