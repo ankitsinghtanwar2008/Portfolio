@@ -1,11 +1,26 @@
+
 export const site = {
   name: 'Ankit Singh',
-  role: 'Developer · Founder · Builder',
-  email: process.env.NEXT_PUBLIC_EMAIL ?? 'hello@ankitsingh.dev',
-  location: 'India · Available worldwide',
+
+  role: 'Founder · Full Stack Developer · AI/ML',
+
+  email: 'ankitsinghtanwar2008@gmail.com',
+
+  location: 'Rajasthan, India',
+
   socials: [
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/' },
-    { label: 'GitHub', href: 'https://github.com/' },
-    { label: 'Instagram', href: 'https://www.instagram.com/' },
+    {
+      label: 'LinkedIn',
+      href: 'https://www.linkedin.com/in/ankit-singh-71a6a133a',
+    },
+    {
+      label: 'GitHub',
+      href: 'https://github.com/ankitsinghtanwar2008',
+    },
   ],
+
+  availability: 'Open to opportunities',
+
+  introduction:
+    'I build digital products, engineer meaningful solutions, and turn ambitious ideas into working experiences.',
 };
