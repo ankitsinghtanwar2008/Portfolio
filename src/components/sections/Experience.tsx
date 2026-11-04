@@ -95,13 +95,36 @@ export default function Experience() {
     <section id="experience" className="experience-section dark-section" ref={sectionRef}>
       <div className="section-container">
 
-        <div className="section-heading reveal">
-          <span className="eyebrow">04 / EXPERIENCE</span>
-          <h2 className="minimal-title">
+        <div className="section-heading reveal" style={{ marginBottom: "50px" }}>
+          <h2 
+            className="minimal-title"
+            style={{
+              fontFamily: 'var(--font-serif, "Playfair Display", serif)',
+              fontSize: 'clamp(48px, 6vw, 96px)',
+              fontWeight: 300,
+              lineHeight: 1.05,
+              letterSpacing: '-0.02em',
+              color: '#ffffff',
+              margin: '0 0 16px 0'
+            }}
+          >
             The journey<br />
-            <em>so far.</em>
+            <em style={{ fontStyle: 'italic', fontWeight: 300, color: '#a36142' }}>
+              so far.
+            </em>
           </h2>
-          <p className="subtitle">
+          <p 
+            className="subtitle"
+            style={{
+              color: '#a1a1aa',
+              fontSize: '15px',
+              fontWeight: 400,
+              letterSpacing: '0.01em',
+              maxWidth: '500px',
+              margin: 0,
+              lineHeight: 1.5
+            }}
+          >
             Research, engineering, entrepreneurship and continuous learning.
           </p>
         </div>
@@ -143,9 +166,19 @@ export default function Experience() {
           ))}
         </div>
 
-        <div className="recognition-heading">
-          <span className="eyebrow">RECOGNITION / MILESTONES</span>
-          <h3 className="minimal-title">Things worth remembering.</h3>
+        <div className="recognition-heading" style={{ marginTop: "80px", marginBottom: "30px" }}>
+          <h3 
+            className="minimal-title"
+            style={{
+              fontFamily: 'var(--font-serif, "Playfair Display", serif)',
+              fontSize: 'clamp(32px, 4vw, 56px)',
+              fontWeight: 300,
+              color: '#ffffff',
+              margin: 0
+            }}
+          >
+            Things worth remembering.
+          </h3>
         </div>
 
         <div className="achievement-grid">

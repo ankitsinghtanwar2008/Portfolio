@@ -1,23 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { Linkedin, Github } from "lucide-react";
+import Link from "next/link";
+import { site } from "@/data/site";
 
 export default function Contact() {
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [status, setStatus] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
     setStatus("sending");
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     
-    // Web3Forms API Key (Apni key yahan daal)
-    formData.append("access_key", "3f3ebf59-b866-438d-96a6-559a24fec4b2");
-    
-    // Taki mail tere paas aaye aur reply seedha user ko ho
-    formData.append("subject", "New Inquiry from Portfolio");
-    formData.append("from_name", "Portfolio Contact Form");
+    // YAHAN APNI WEB3FORMS KI ACCESS KEY DAALNA
+    formData.append("access_key", "3f3ebf59-b866-438d-96a6-559a24fec4b2"); 
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -29,88 +29,74 @@ export default function Contact() {
 
       if (data.success) {
         setStatus("success");
-        (e.target as HTMLFormElement).reset();
-        setTimeout(() => setStatus("idle"), 5000); // 5 second baad message hide ho jayega
+        form.reset();
       } else {
         setStatus("error");
-        setTimeout(() => setStatus("idle"), 5000);
       }
     } catch (error) {
-      console.error(error);
       setStatus("error");
-      setTimeout(() => setStatus("idle"), 5000);
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setStatus(""), 5000);
     }
   };
 
   return (
     <section className="inquiry-section" id="contact">
+      {/* Top right CLOSE button */}
       <div className="inquiry-close">
         <button>CLOSE</button>
       </div>
 
       <div className="inquiry-grid">
-        {/* LEFT COLUMN */}
+        
+        {/* LEFT COLUMN: INQUIRY NOW */}
         <div className="inquiry-left">
           <h2 className="inquiry-title">
-            INQUIRY<br />NOW
+            INQUIRY <br /> NOW <span className="title-dot"></span>
           </h2>
 
           <div className="inquiry-details">
             <div className="detail-block">
               <span className="detail-label">EMAIL</span>
-              <p>
-                <a href="mailto:ankitsinghtanwar2008@gmail.com" className="contact-link">
-                  ankitsinghtanwar2008@gmail.com
-                </a>
-              </p>
-            </div>
-
-            <div className="detail-block">
-              <span className="detail-label">CONTACTS</span>
-              <p>
-                <a href="tel:+917851056138" className="contact-link">+91 7851056138</a><br />
-                <span className="detail-sub">AVAILABLE FOR DIRECT CALLS</span>
-              </p>
-            </div>
-
-            <div className="social-links">
-              <a href="https://www.linkedin.com/in/ankit-singh-71a6a133a/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                <Linkedin size={22} />
+              <a href={`mailto:${site.email}`} className="contact-link">
+                {site.email}
               </a>
-              <a href="https://github.com/ankitsinghtanwar2008" target="_blank" rel="noreferrer" aria-label="GitHub">
-                <Github size={22} />
+            </div>
+            
+            <div className="detail-block">
+              <span className="detail-label">PHONE</span>
+              <a href="tel:+917851056138" className="contact-link">
+                +91 7851056138
               </a>
             </div>
           </div>
         </div>
 
-        {/* RIGHT COLUMN - Form */}
+        {/* RIGHT COLUMN: FLAT FORM WITH GRID BACKGROUND */}
         <div className="inquiry-right">
+          
+          {/* YAHAN GRID BACKGROUND ADD KIYA HAI */}
+          <div className="inquiry-grid-bg"></div>
+          
           <div className="form-top-bar">
             <div className="register-interest">
-              <span className="dot"></span> REGISTER INTEREST
+              <span className="dot"></span>
+              <span>REGISTER INTEREST</span>
             </div>
-            <div className="required-fields">*REQUIRED FIELDS</div>
+            <span>*REQUIRED FIELDS</span>
           </div>
 
-          {/* Stylish Status Message */}
-          {status !== "idle" && (
-            <div className={`status-message ${status}`}>
-              {status === "sending" && "SENDING TO ANKITSINGHTANWAR2008@GMAIL.COM..."}
-              {status === "success" && "MESSAGE SENT SUCCESSFULLY. I WILL GET BACK TO YOU SOON."}
-              {status === "error" && "SOMETHING WENT WRONG. PLEASE TRY AGAIN."}
-            </div>
-          )}
-
-          <form className="inquiry-form" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="inquiry-form">
+            
             <div className="form-row">
               <div className="input-group">
-                <label htmlFor="firstName">FIRST NAME*</label>
-                <input type="text" id="firstName" name="First Name" required />
+                <label htmlFor="first_name">FIRST NAME*</label>
+                <input type="text" id="first_name" name="first_name" required />
               </div>
               <div className="input-group">
-                <label htmlFor="lastName">LAST NAME*</label>
-                <input type="text" id="lastName" name="Last Name" required />
+                <label htmlFor="last_name">LAST NAME*</label>
+                <input type="text" id="last_name" name="last_name" required />
               </div>
             </div>
 
@@ -121,32 +107,43 @@ export default function Contact() {
               </div>
               <div className="input-group">
                 <label htmlFor="phone">PHONE NUMBER</label>
-                <input type="tel" id="phone" name="Phone" />
+                <input type="tel" id="phone" name="phone" />
               </div>
             </div>
 
             <div className="form-row full-width">
               <div className="input-group">
                 <label htmlFor="request">REQUEST*</label>
-                <textarea id="request" name="Message" rows={1} required></textarea>
+                <textarea id="request" name="request" rows={1} required></textarea>
               </div>
             </div>
 
             <div className="privacy-checkbox">
               <label>
-                <input type="checkbox" required className="hidden-checkbox" />
-                <div className="custom-radio"></div>
+                <input type="checkbox" name="privacy" className="hidden-checkbox" required />
+                <span className="custom-radio"></span>
                 <span>
                   I HAVE READ AND ACCEPT THE <a href="#">PRIVACY POLICY</a>.
                 </span>
               </label>
             </div>
 
-            <button type="submit" className="submit-btn" disabled={status === "sending"}>
+            {/* Status Message Display */}
+            {status && (
+              <div className={`status-message ${status}`}>
+                {status === "sending" && "Sending message..."}
+                {status === "success" && "Message sent successfully!"}
+                {status === "error" && "Error sending message. Please try again."}
+              </div>
+            )}
+
+            <button type="submit" disabled={isSubmitting} className="submit-btn">
               SUBMIT
             </button>
+            
           </form>
         </div>
+
       </div>
     </section>
   );

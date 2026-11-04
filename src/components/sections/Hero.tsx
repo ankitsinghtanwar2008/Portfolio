@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
+import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 
 import { gsap } from "@/lib/gsap";
 
@@ -142,20 +143,35 @@ export default function Hero() {
               well-crafted digital experiences.
             </p>
 
-            <div className="hero-actions">
-              <a href="#work" className="hero-primary-link">
-                EXPLORE MY WORK
-                <ArrowUpRight size={16} />
+            {/* Hover Border Gradient Buttons */}
+            <div className="hero-actions" style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "center" }}>
+              
+              <a href="#work" style={{ textDecoration: "none" }}>
+                <HoverBorderGradient
+                  containerClassName="rounded-full"
+                  as="button"
+                  className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2 px-6 py-3"
+                >
+                  <ArrowUpRight size={16} />
+                  <span>EXPLORE MY WORK</span>
+                </HoverBorderGradient>
               </a>
 
-              <a href="#about" className="hero-secondary-link">
-                MORE ABOUT ME
+              <a href="#about" style={{ textDecoration: "none" }}>
+                <HoverBorderGradient
+                  containerClassName="rounded-full"
+                  as="button"
+                  className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2 px-6 py-3"
+                >
+                  <span>MORE ABOUT ME</span>
+                </HoverBorderGradient>
               </a>
+
             </div>
           </div>
 
           <div className="hero-visual">
-            <div className="hero-portrait">
+            <div className="hero-portrait" style={{ position: "relative", overflow: "hidden" }}>
               <Image
                 src="/images/profile/ankit1.jpg"
                 alt="Ankit Singh"
@@ -165,9 +181,21 @@ export default function Hero() {
                 className="hero-portrait-image"
               />
 
-              <div className="hero-portrait-overlay" />
+              {/* Image ke chaaro taraf fade (vignette mask) */}
+              <div 
+                className="hero-portrait-fade" 
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "radial-gradient(circle at center, transparent 40%, #000000 90%)",
+                  pointerEvents: "none",
+                  zIndex: 2
+                }}
+              />
 
-              <span className="portrait-caption">
+              <div className="hero-portrait-overlay" style={{ zIndex: 3 }} />
+
+              <span className="portrait-caption" style={{ zIndex: 4 }}>
                 ANKIT SINGH
               </span>
             </div>
@@ -195,12 +223,6 @@ export default function Hero() {
             BASED IN INDIA · AVAILABLE WORLDWIDE
           </span>
         </div>
-      </div>
-
-      <div className="hero-index">
-        <span>01</span>
-        <span>—</span>
-        <span>06</span>
       </div>
     </section>
   );

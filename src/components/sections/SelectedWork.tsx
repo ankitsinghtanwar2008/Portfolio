@@ -94,7 +94,7 @@ export default function SelectedWork() {
     <section className="work-section dark-section" id="work" ref={ref}>
       <div className="work-heading">
         <div>
-          <p className="eyebrow">04 / SELECTED WORK</p>
+          <p className="eyebrow"></p>
 
           <h2>
             Things I've
@@ -122,7 +122,7 @@ export default function SelectedWork() {
               aria-label={`View ${project.title} project`}
             >
               <div className="project-visual-top">
-                <span>AS / SELECTED WORK</span>
+                <span></span>
                 <span>
                   {project.number} — {totalProjects}
                 </span>
@@ -189,7 +189,6 @@ export default function SelectedWork() {
 
       <div className="work-footnote">
         <span>MORE EXPERIMENTS IN PROGRESS</span>
-        <span>{totalProjects} / {totalProjects}</span>
       </div>
     </section>
   );

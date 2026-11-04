@@ -2,10 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 import { gsap } from "@/lib/gsap";
-import { site } from "@/data/site";
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -100,7 +100,6 @@ export default function About() {
       id="about"
       ref={sectionRef}
     >
-      {/* Background portrait */}
       <div className="about-background">
         <Image
           src="/images/profile/ankit2.jpg"
@@ -114,18 +113,17 @@ export default function About() {
 
       <div className="about-background-overlay" />
 
-      {/* Main editorial card */}
       <div className="about-card">
         <div className="about-card-top">
           <div>
-            <span className="about-brand">ANKIT SINGH / PORTFOLIO</span>
             <h2 className="about-heading">ABOUT</h2>
           </div>
 
           <div className="about-card-navigation">
             <a href="#work">WORK</a>
             <a href="#experience">EXPERIENCE</a>
-            <a href="#contact">CONTACT</a>
+            {/* Isko bhi update karke new page par bhej diya h */}
+            <Link href="/contact">CONTACT</Link>
           </div>
         </div>
 
@@ -138,9 +136,10 @@ export default function About() {
               sizes="(max-width: 768px) 80vw, 38vw"
               className="about-photo-image"
             />
-
+            
+            {/* WAPAS ADD KIYA GAYA - Image Caption */}
             <span className="about-photo-caption">
-              ANKIT SINGH — 2026
+              ANKIT SINGH
             </span>
           </div>
 
@@ -174,25 +173,23 @@ export default function About() {
               creating technology that solves real-world problems.
             </p>
 
-            <a
-              href={`mailto:${site.email}`}
+            {/* Directs to contact page */}
+            <Link
+              href="/contact"
               className="about-link"
             >
               LET'S CONNECT
               <ArrowUpRight size={17} />
-            </a>
+            </Link>
           </div>
         </div>
-
+        
+        {/* WAPAS ADD KIYA GAYA - Bottom Labels */}
         <div className="about-card-bottom">
           <span>COMPUTER SCIENCE · AI & MACHINE LEARNING</span>
-          <span>INDIA / 2026</span>
+          <span>INDIA</span>
         </div>
       </div>
-
-      <span className="about-side-label">
-        PERSONAL PROFILE — 01
-      </span>
     </section>
   );
 }
