@@ -965,13 +965,12 @@ img {
 
 
 /* =========================================
-   TECHNICAL SKILLS MARQUEE
+   TECHNICAL SKILLS GRID MARQUEE
 ========================================= */
 .technical-section {
-  padding: 100px 0;
-  background-color: #0f0b0a; /* Dark theme background */
+  padding: 60px 0; /* 120px se half karke 60px kar diya */
+  background-color: #0f0b0a;
   overflow: hidden;
-  color: #e5e0d8;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -979,99 +978,150 @@ img {
 
 .technical-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 30px; /* 70px se half karke 30px kar diya */
   padding: 0 4vw;
 }
 
-.marquee-wrapper {
+
+/* MARQUEE WRAPPER */
+.grid-marquee-wrapper {
   position: relative;
   width: 100%;
+  max-width: 1400px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 20px 0;
+  gap: 12px;
+  
+  /* YAHAN PADDING BADHAI HAI: Top me 50px diya hai taaki tooltip aaram se dikhe */
+  padding: 50px 0 30px 0; 
+  
+  /* Sides se fade karne ke liye mask */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
 }
 
-/* Faded Edges Overlay */
-.marquee-fade-overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 10;
-  /* Left aur Right sides fade out hongi background me */
-  background: linear-gradient(
-    to right,
-    #0f0b0a 0%,
-    transparent 15%,
-    transparent 85%,
-    #0f0b0a 100%
-  );
-}
-
-.marquee-track {
+.grid-marquee-track {
   display: flex;
-  overflow: hidden;
+  overflow: visible; /* Tooltip kate nahi isliye visible rakha hai */
   width: 100%;
 }
 
-.marquee-content {
+.grid-marquee-content {
   display: flex;
-  gap: 20px;
+  gap: 12px;
   width: max-content;
 }
 
-/* Animations */
+/* ANIMATIONS */
 .scroll-left {
-  animation: scrollLeft 35s linear infinite;
+  animation: gridScrollLeft 45s linear infinite;
 }
 
 .scroll-right {
-  animation: scrollRight 35s linear infinite;
+  animation: gridScrollRight 45s linear infinite;
 }
 
-@keyframes scrollLeft {
+@keyframes gridScrollLeft {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(-33.33%); } /* 3 times duplicate kiya array isliye 33.33% */
 }
 
-@keyframes scrollRight {
-  0% { transform: translateX(-50%); }
+@keyframes gridScrollRight {
+  0% { transform: translateX(-33.33%); }
   100% { transform: translateX(0); }
 }
 
-/* Individual Skill Card */
-.skill-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background-color: rgba(255, 255, 255, 0.03);
-  border: 1px solid #333;
-  padding: 15px 30px;
-  border-radius: 8px;
-  font-family: var(--font-sans, system-ui, sans-serif);
-  font-size: 14px;
-  color: #a3a29b;
-  white-space: nowrap;
-  transition: all 0.3s ease;
-}
-
-.skill-card:hover {
-  background-color: rgba(255, 255, 255, 0.08);
-  border-color: #555;
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-.skill-icon {
-  color: #a36142; /* Premium brownish accent */
+/* THE BOXES */
+.grid-box {
+  width: 76px;
+  height: 76px;
+  border-radius: 20px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative; /* Tooltip ko set karne ke liye zaroori */
 }
 
-.skill-icon svg {
-  width: 20px;
-  height: 20px;
+/* ACTIVE ICON BOX */
+.box-icon {
+  background-color: #f0f0f0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.box-icon:hover {
+  transform: scale(1.08);
+}
+
+/* SLEEK TOOLTIP DESIGN */
+.box-tooltip {
+  position: absolute;
+  top: -38px;
+  background-color: #1a1716;
+  color: #e5e0d8;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border: 1px solid #333;
+  z-index: 20;
+  
+  /* Hidden Animation Setup */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Tooltip Arrow */
+.box-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+/* Hover Effect for Tooltip */
+.box-icon:hover .box-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* EMPTY PLACEHOLDER BOX (Dark) */
+.box-empty {
+  background-color: #1a1716;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Responsive Scaling for Mobile */
+@media (max-width: 768px) {
+  .grid-box {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+  }
+  .grid-marquee-content {
+    gap: 8px;
+  }
+  .grid-marquee-wrapper {
+    gap: 8px;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%);
+  }
+  .box-tooltip {
+    display: none; /* Phone pe touch se tooltip dikkat karti hai isliye hide kar di */
+  }
 }
 
 
