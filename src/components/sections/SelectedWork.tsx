@@ -2,99 +2,96 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+
 import { projects } from "@/data/projects";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 export default function SelectedWork() {
-  const ref = useRef<HTMLElement>(null);
-
-  const featuredProjects = projects.filter(
-    (project) => project.featured
-  );
-
-  const totalProjects = String(featuredProjects.length).padStart(2, "0");
+  const trackRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const section = ref.current;
-    if (!section) return;
+    const section = sectionRef.current;
+    const track = trackRef.current;
 
-    const track = section.querySelector<HTMLElement>(".project-track");
-    if (!track) return;
+    if (!section || !track) return;
 
-    const mediaQuery = window.matchMedia("(min-width: 900px)");
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+    let target = track.scrollLeft;
+    let current = track.scrollLeft;
+    let animationFrame = 0;
+    let isVisible = false;
+
+    const maxScroll = () =>
+      Math.max(0, track.scrollWidth - track.clientWidth);
+
+    const animate = () => {
+      current += (target - current) * 0.075;
+
+      if (Math.abs(target - current) < 0.5) {
+        current = target;
+      }
+
+      track.scrollLeft = current;
+
+      if (current !== target) {
+        animationFrame = requestAnimationFrame(animate);
+      } else {
+        animationFrame = 0;
+      }
+    };
+
+    const moveGallery = (amount: number) => {
+      target = Math.max(0, Math.min(maxScroll(), target + amount));
+
+      if (!animationFrame) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    const handleWheel = (event: WheelEvent) => {
+      if (!isVisible) return;
+
+      // Trackpad horizontal gestures are handled natively.
+      if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+        return;
+      }
+
+      // Vertical page scrolling gently advances the gallery.
+      if (Math.abs(event.deltaY) > 8) {
+        moveGallery(event.deltaY * 0.45);
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0.1 }
     );
 
-    const ctx = gsap.context(() => {
-      const setupAnimation = () => {
-        ScrollTrigger.getAll().forEach((trigger) => {
-          if (trigger.trigger === section || trigger.trigger === track) {
-            trigger.kill();
-          }
-        });
+    observer.observe(section);
+    section.addEventListener("wheel", handleWheel, {
+      passive: true,
+    });
 
-        gsap.set(track, { clearProps: "transform" });
-
-        if (
-          mediaQuery.matches &&
-          !reducedMotion.matches &&
-          track.scrollWidth > window.innerWidth
-        ) {
-          gsap.to(track, {
-            x: () => -(track.scrollWidth - window.innerWidth),
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              pin: true,
-              scrub: 1,
-              start: "top top",
-              end: () =>
-                `+=${track.scrollWidth - window.innerWidth}`,
-              invalidateOnRefresh: true,
-            },
-          });
-        } else {
-          gsap.from(".project-panel", {
-            y: 35,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: track,
-              start: "top 85%",
-            },
-          });
-        }
-
-        ScrollTrigger.refresh();
-      };
-
-      setupAnimation();
-
-      const handleResize = () => setupAnimation();
-
-      mediaQuery.addEventListener("change", handleResize);
-      reducedMotion.addEventListener("change", handleResize);
-      window.addEventListener("resize", handleResize);
-
-      return () => {
-        mediaQuery.removeEventListener("change", handleResize);
-        reducedMotion.removeEventListener("change", handleResize);
-        window.removeEventListener("resize", handleResize);
-      };
-    }, section);
-
-    return () => ctx.revert();
+    return () => {
+      observer.disconnect();
+      section.removeEventListener("wheel", handleWheel);
+      cancelAnimationFrame(animationFrame);
+    };
   }, []);
 
   return (
-    <section className="work-section dark-section" id="work" ref={ref}>
+    <section
+      className="work-section dark-section"
+      id="work"
+      ref={sectionRef}
+    >
       <div className="work-heading">
         <div>
-          <p className="eyebrow"></p>
+          <p className="eyebrow">
+            SELECTED PROJECTS / 2024—2026
+          </p>
 
           <h2>
             Things I've
@@ -106,12 +103,13 @@ export default function SelectedWork() {
         </div>
 
         <span className="work-instruction">
-          SCROLL TO EXPLORE ↗
+          SCROLL TO EXPLORE
+          <ArrowRight size={14} />
         </span>
       </div>
 
-      <div className="project-track">
-        {featuredProjects.map((project) => (
+      <div className="project-track" ref={trackRef}>
+        {projects.map((project) => (
           <article
             className={`project-panel project-${project.slug}`}
             key={project.slug}
@@ -119,13 +117,11 @@ export default function SelectedWork() {
             <Link
               href={`/projects/${project.slug}`}
               className="project-visual"
-              aria-label={`View ${project.title} project`}
+              aria-label={`View ${project.title}`}
             >
               <div className="project-visual-top">
-                <span></span>
-                <span>
-                  {project.number} — {totalProjects}
-                </span>
+                <span>SELECTED PROJECT</span>
+                <span>{project.number} / 08</span>
               </div>
 
               <div className="project-art-content">
@@ -133,13 +129,7 @@ export default function SelectedWork() {
                   {project.category}
                 </span>
 
-                <strong
-                  className={
-                    project.slug === "gharse"
-                      ? "serif-italic"
-                      : ""
-                  }
-                >
+                <strong>
                   {project.title}
                   <span>.</span>
                 </strong>
@@ -151,6 +141,10 @@ export default function SelectedWork() {
 
               <span className="project-visual-index">
                 {project.number}
+              </span>
+
+              <span className="project-visual-arrow">
+                <ArrowUpRight size={22} />
               </span>
             </Link>
 
@@ -189,6 +183,7 @@ export default function SelectedWork() {
 
       <div className="work-footnote">
         <span>MORE EXPERIMENTS IN PROGRESS</span>
+        <span>DESIGNED & BUILT WITH INTENTION.</span>
       </div>
     </section>
   );

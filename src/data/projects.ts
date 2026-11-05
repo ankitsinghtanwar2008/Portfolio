@@ -56,7 +56,7 @@ export const projects: Project[] = [
     slug: "trapla",
     number: "03",
     title: "TRAPLA",
-    category: "EDTECH / WEB EXPERIENCE",
+    category: "CLIENT PROJECT / Edcuational Platform WEBSITE",
     year: "2026",
     description:
       "A digital experience designed for a training and placement ecosystem.",
@@ -81,14 +81,14 @@ export const projects: Project[] = [
     category: "JAVA / DATABASE",
     year: "2025",
     description:
-      "A Java-based ATM application featuring authentication and transaction management.",
+      "A secure ATM management system with complete transaction handling, user authentication, and data security.",
     longDescription:
       "Developed a secure ATM management application with user authentication, transaction handling and database operations using Java and MySQL.",
     technologies: ["Java", "OOP", "MySQL"],
     role: "Java Developer",
     status: "COMPLETED",
     coverImage: "/images/projects/atm.jpg",
-    featured: false,
+    featured: true,
   },
 
   {
@@ -98,13 +98,64 @@ export const projects: Project[] = [
     category: "CLIENT PROJECT / WEBSITE",
     year: "2024",
     description:
-      "A responsive business website developed for a local business.",
+      "A fully responsive, performance-optimized business website focused on clean UI/UX design principles.",
     longDescription:
-      "Designed and developed a business website with responsive layouts, clean presentation and mobile-friendly functionality.",
+      "Designed and developed a business website with responsive layouts, clean presentation and mobile-friendly functionality for a client.",
     technologies: ["HTML", "CSS", "JavaScript"],
     role: "Frontend Developer",
     status: "COMPLETED",
     coverImage: "/images/projects/krishna-tent-house.jpg",
-    featured: false,
+    featured: true,
   },
+
+  {
+    slug: "voice-assistant",
+    number: "06",
+    title: "VoiceAssistant",
+    category: "ANDROID APPLICATION",
+    year: "2024",
+    description:
+      "A native Android voice assistant application with intelligent voice command processing.",
+    longDescription:
+      "Built a native Android application using Kotlin that functions as a voice assistant, capable of processing commands and performing on-device tasks.",
+    technologies: ["Kotlin", "Android SDK"],
+    role: "Android Developer",
+    status: "COMPLETED",
+    coverImage: "/images/projects/voice-assistant.jpg",
+    featured: true,
+  },
+
+  {
+    slug: "volume-booster",
+    number: "07",
+    title: "Volume Booster",
+    category: "ANDROID APPLICATION",
+    year: "2024",
+    description:
+      "An audio utility application built to enhance device volume limits seamlessly.",
+    longDescription:
+      "Developed an audio utility app in Kotlin that safely enhances the device's volume limits, providing a seamless user experience.",
+    technologies: ["Kotlin", "Android SDK"],
+    role: "Android Developer",
+    status: "COMPLETED",
+    coverImage: "/images/projects/volume-booster.jpg",
+    featured: true,
+  },
+
+  {
+    slug: "hanuman-chalisa",
+    number: "08",
+    title: "Hanuman Chalisa App",
+    category: "ANDROID APPLICATION",
+    year: "2024",
+    description:
+      "A devotional reading and audio application built with a clean, user-friendly interface.",
+    longDescription:
+      "Created a devotional Android app featuring readable text and audio playback functionality with a highly accessible UI.",
+    technologies: ["Kotlin", "Android SDK"],
+    role: "Android Developer",
+    status: "COMPLETED",
+    coverImage: "/images/projects/hanuman-chalisa.jpg",
+    featured: true,
+  }
 ];
