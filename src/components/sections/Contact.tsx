@@ -3,14 +3,27 @@
 import { useState } from "react";
 import Link from "next/link";
 import { site } from "@/data/site";
-import { Linkedin, Github } from "lucide-react"; // Icons import kar liye
+import { Linkedin, Github } from "lucide-react";
+import HCaptcha from "@hcaptcha/react-hcaptcha"; // hCaptcha import kiya
 
 export default function Contact() {
   const [status, setStatus] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Captcha token state
+  const [captchaToken, setCaptchaToken] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Captcha validation check
+    if (!captchaToken) {
+      setStatus("error");
+      // Optional: Agar tera koi toast ya alert mechanism hai toh wahan error message show kar sakta hai
+      alert("Please solve the Captcha first!");
+      return;
+    }
+
     setIsSubmitting(true);
     setStatus("sending");
 
@@ -19,6 +32,9 @@ export default function Contact() {
     
     // YAHAN APNI WEB3FORMS KI ACCESS KEY DAALNA
     formData.append("access_key", "3f3ebf59-b866-438d-96a6-559a24fec4b2"); 
+    
+    // Backend ko Captcha response bhejna
+    formData.append("h-captcha-response", captchaToken);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -31,6 +47,7 @@ export default function Contact() {
       if (data.success) {
         setStatus("success");
         form.reset();
+        setCaptchaToken(""); // Captcha clear karna zaroori hai
       } else {
         setStatus("error");
       }
@@ -40,6 +57,10 @@ export default function Contact() {
       setIsSubmitting(false);
       setTimeout(() => setStatus(""), 5000);
     }
+  };
+
+  const onHCaptchaChange = (token: string) => {
+    setCaptchaToken(token);
   };
 
   return (
@@ -72,7 +93,7 @@ export default function Contact() {
               </a>
             </div>
 
-            {/* Naya SOCIAL block add kiya hai */}
+            {/* SOCIAL block */}
             <div className="detail-block">
               <span className="detail-label">SOCIAL</span>
               <div className="social-links" style={{ display: 'flex', gap: '16px', marginTop: '4px' }}>
@@ -156,6 +177,16 @@ export default function Contact() {
                   I HAVE READ AND ACCEPT THE <a href="#">PRIVACY POLICY</a>.
                 </span>
               </label>
+            </div>
+
+            {/* hCaptcha Integration - Submit Button ke theek upar */}
+            <div style={{ marginBottom: "20px" }}>
+              <HCaptcha
+                sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+                reCaptchaCompat={false}
+                onVerify={onHCaptchaChange}
+                theme="dark"
+              />
             </div>
 
             {/* Status Message Display */}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Mail, Linkedin, Github, CheckCircle2 } from "lucide-react";
 import { site } from "@/data/site";
-import Link from "next/link";
+import HCaptcha from "@hcaptcha/react-hcaptcha"; // hCaptcha import kiya
 
 const InteractiveMap = () => {
   return (
@@ -27,11 +27,20 @@ const InteractiveMap = () => {
 export default function ContactPage() {
   const [status, setStatus] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
   const [toastMessage, setToastMessage] = useState("");
+  
+  // Captcha token state
+  const [captchaToken, setCaptchaToken] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Captcha validation check
+    if (!captchaToken) {
+      setStatus("Error: Please solve the Captcha first!");
+      return;
+    }
+
     setIsSubmitting(true);
     setStatus("Sending...");
 
@@ -40,6 +49,9 @@ export default function ContactPage() {
     
     // YAHAN APNI WEB3FORMS KI ACCESS KEY DAALNA
     formData.append("access_key", "13a362e5-db95-48d2-9770-64acf9b02521"); 
+    
+    // Backend ko Captcha response bhejna
+    formData.append("h-captcha-response", captchaToken);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -52,6 +64,7 @@ export default function ContactPage() {
       if (data.success) {
         setStatus("Message sent successfully!");
         form.reset();
+        setCaptchaToken(""); // Captcha clear karna
       } else {
         setStatus("Something went wrong. Please try again.");
       }
@@ -70,6 +83,10 @@ export default function ContactPage() {
     setTimeout(() => {
       setToastMessage("");
     }, 2500);
+  };
+
+  const onHCaptchaChange = (token: string) => {
+    setCaptchaToken(token);
   };
 
   return (
@@ -226,6 +243,16 @@ export default function ContactPage() {
               <div className="form-group">
                 <label htmlFor="message">Message</label>
                 <textarea id="message" name="message" placeholder="Type your message here" rows={5} required ></textarea>
+              </div>
+
+              {/* hCaptcha Integration - Submit Button ke upar */}
+              <div className="form-group" style={{ marginBottom: "20px" }}>
+                <HCaptcha
+                  sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+                  reCaptchaCompat={false}
+                  onVerify={onHCaptchaChange}
+                  theme="dark"
+                />
               </div>
 
               <button type="submit" disabled={isSubmitting} className="submit-button">
