@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { NoiseBackground } from "@/components/ui/noise-background";
-
 import { gsap } from "@/lib/gsap";
 
 export default function Hero() {
@@ -27,8 +26,13 @@ export default function Hero() {
             ".hero-description",
             ".hero-actions",
             ".hero-portrait",
+            ".hero-orbit",
           ],
-          { opacity: 1, y: 0, clearProps: "transform" }
+          {
+            opacity: 1,
+            y: 0,
+            clearProps: "transform",
+          }
         );
 
         return;
@@ -42,17 +46,14 @@ export default function Hero() {
       });
 
       timeline
-        .from(
-          ".hero-title-line",
-          {
-            yPercent: 110,
-            rotation: 2,
-            opacity: 0,
-            stagger: 0.13,
-            duration: 1.1,
-            ease: "power4.out",
-          }
-        )
+        .from(".hero-title-line", {
+          yPercent: 110,
+          rotation: 2,
+          opacity: 0,
+          stagger: 0.13,
+          duration: 1.1,
+          ease: "power4.out",
+        })
         .from(
           ".hero-description, .hero-actions",
           {
@@ -66,7 +67,7 @@ export default function Hero() {
         .from(
           ".hero-portrait",
           {
-            scale: 1.12,
+            scale: 1.08,
             opacity: 0,
             duration: 1.5,
             ease: "power3.out",
@@ -111,7 +112,11 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="hero dark-section" id="top" ref={heroRef}>
+    <section
+      className="hero dark-section"
+      id="top"
+      ref={heroRef}
+    >
       <div className="hero-grain" />
 
       <div className="hero-content">
@@ -120,18 +125,20 @@ export default function Hero() {
             <div className="hero-title-wrap">
               <h1>
                 <span className="title-mask">
-                  <span className="hero-title-line">I BUILD</span>
+                  <span className="hero-title-line">
+                    CODE WITH
+                  </span>
                 </span>
 
                 <span className="title-mask">
                   <span className="hero-title-line title-outline">
-                    DIGITAL
+                    PURPOSE
                   </span>
                 </span>
 
                 <span className="title-mask">
                   <span className="hero-title-line">
-                    THINGS<span className="hero-period">.</span>
+                    & CRAFT<span className="hero-period">.</span>
                   </span>
                 </span>
               </h1>
@@ -143,9 +150,8 @@ export default function Hero() {
               well-crafted digital experiences.
             </p>
 
-            {/* Buttons with Advanced Moving Noise Lighting & Hover Effects */}
-            <div className="hero-actions" style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "center", marginTop: "28px" }}>
-              <a href="#work" style={{ textDecoration: "none", display: "inline-block" }}>
+            <div className="hero-actions">
+              <a href="#work" className="hero-action-link">
                 <NoiseBackground
                   containerClassName="w-fit rounded-full"
                   gradientColors={[
@@ -154,14 +160,14 @@ export default function Hero() {
                     "rgba(255, 200, 100, 1)",
                   ]}
                 >
-                  <button className="h-full w-full cursor-pointer rounded-full bg-transparent px-6 py-3 text-white flex items-center space-x-2 text-xs tracking-wider font-semibold hover:text-white/90 transition-colors">
+                  <button className="hero-action-button">
                     <span>EXPLORE MY WORK</span>
-                    <ArrowUpRight size={14} className="ml-2 opacity-80" />
+                    <ArrowUpRight size={14} />
                   </button>
                 </NoiseBackground>
               </a>
 
-              <a href="#about" style={{ textDecoration: "none", display: "inline-block" }}>
+              <a href="#about" className="hero-action-link">
                 <NoiseBackground
                   containerClassName="w-fit rounded-full"
                   gradientColors={[
@@ -170,7 +176,7 @@ export default function Hero() {
                     "rgba(255, 200, 100, 1)",
                   ]}
                 >
-                  <button className="h-full w-full cursor-pointer rounded-full bg-transparent px-6 py-3 text-white flex items-center space-x-2 text-xs tracking-wider font-semibold hover:text-white/90 transition-colors">
+                  <button className="hero-action-button">
                     <span>MORE ABOUT ME</span>
                   </button>
                 </NoiseBackground>
@@ -179,8 +185,8 @@ export default function Hero() {
           </div>
 
           <div className="hero-visual">
+            {/* Portrait with seamless background blending */}
             <div className="hero-portrait">
-              {/* Strict inline radial mask applied to completely eliminate rectangular edges */}
               <Image
                 src="/images/profile/ankit1.jpg"
                 alt="Ankit Singh"
@@ -188,35 +194,16 @@ export default function Hero() {
                 priority
                 sizes="(max-width: 768px) 85vw, 48vw"
                 className="hero-portrait-image"
-                style={{
-                  WebkitMaskImage: "radial-gradient(circle, black 25%, transparent 70%)",
-                  maskImage: "radial-gradient(circle, black 25%, transparent 70%)"
-                }}
               />
 
               <div className="hero-portrait-overlay" />
 
-              {/* Top Left Fix for ANKIT SINGH */}
-              <span 
-                style={{
-                  position: "absolute",
-                  top: "20px",
-                  left: "20px",
-                  zIndex: 5,
-                  color: "#ffffff",
-                  fontSize: "10px",
-                  letterSpacing: "0.3em",
-                  fontWeight: 600,
-                  textTransform: "uppercase",
-                  opacity: 0.9,
-                  fontFamily: "var(--font-sans, sans-serif)",
-                  textShadow: "0 2px 8px rgba(0,0,0,0.9)"
-                }}
-              >
+              <span className="portrait-caption">
                 ANKIT SINGH
               </span>
             </div>
 
+            {/* Orbit animation */}
             <div className="hero-orbit">
               <div className="hero-orbit-ring">
                 <i />

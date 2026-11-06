@@ -620,63 +620,303 @@ img {
   letter-spacing: 0.15em;
 }
 
-/* Hero portrait */
+
+/* =========================================
+   HERO PORTRAIT - SEAMLESS BLENDING
+========================================= */
+
+.hero-visual {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: 48%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+  isolation: isolate;
+}
+
+/* Main portrait container */
 
 .hero-portrait {
   position: absolute;
+
   top: 50%;
   right: 5%;
-  z-index: 1;
-  width: clamp(250px, 29vw, 440px);
-  height: min(72vh, 650px);
+
+  width: clamp(300px, 34vw, 520px);
+  height: min(78vh, 720px);
+
   overflow: hidden;
-  pointer-events: none;
+
   transform: translateY(-48%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+  pointer-events: none;
+
+  /* No visible container */
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
+
+/* Actual image */
 
 .hero-portrait-image,
 .hero-portrait img {
+  object-fit: cover;
+  object-position: center 25%;
+
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  filter: grayscale(100%) contrast(1.08);
-  opacity: 0.88;
-  /* Updated mask limits to strictly hide the rectangular edges */
-  -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 68%);
-  mask-image: radial-gradient(circle at center, black 30%, transparent 68%);
+
+  filter:
+    grayscale(100%)
+    contrast(1.08)
+    brightness(0.88);
+
+  opacity: 0.92;
+
+  /*
+    Three masks multiplied together (intersect):
+    1) radial  -> soft oval around the face
+    2) left/right linear -> 100% transparent at both side edges
+    3) top/bottom linear -> 100% transparent at top and bottom edges
+
+    Result: every edge of the image is fully transparent, so the
+    page background shows through and no border/box is visible.
+  */
+
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse 58% 54% at 50% 46%,
+      #000 35%,
+      rgba(0, 0, 0, 0.9) 50%,
+      rgba(0, 0, 0, 0.55) 68%,
+      rgba(0, 0, 0, 0.2) 84%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      #000 26%,
+      #000 74%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 20%,
+      #000 66%,
+      transparent 100%
+    );
+
+  mask-image:
+    radial-gradient(
+      ellipse 58% 54% at 50% 46%,
+      #000 35%,
+      rgba(0, 0, 0, 0.9) 50%,
+      rgba(0, 0, 0, 0.55) 68%,
+      rgba(0, 0, 0, 0.2) 84%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      #000 26%,
+      #000 74%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 20%,
+      #000 66%,
+      transparent 100%
+    );
+
+  -webkit-mask-composite: source-in, source-in;
+  mask-composite: intersect, intersect;
 }
+
+/*
+  Old overlay used a solid #0b0b0a colour which did not match the
+  real page background (grain etc.) and created a visible box.
+  The mask above handles the fade now, so the overlay is turned off.
+*/
 
 .hero-portrait-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  /* Darkened overlay to perfectly match the section background */
-  background: radial-gradient(circle at center, transparent 35%, #0b0b0a 80%);
-  box-shadow: inset 0 0 120px 60px #0b0b0a;
-}
-
-.hero-portrait::after {
   display: none;
 }
 
-/* New CSS class for Top Left Caption */
+/* Remove old rectangular decoration */
+
+.hero-portrait::before,
+.hero-portrait::after {
+  display: none;
+  content: none;
+}
+
+/* Portrait caption */
+
 .portrait-caption {
   position: absolute;
-  top: 24px;
-  left: 24px;
+
+  top: auto;
+  left: auto;
+  right: 35px;
+  bottom: 35px;
+
+  text-align: right;
+
   z-index: 5;
+
   color: #ffffff;
+
   font-size: 10px;
-  letter-spacing: 0.3em;
   font-weight: 600;
+
+  letter-spacing: 0.3em;
   text-transform: uppercase;
+
+  opacity: 0.9;
+
   font-family: var(--font-sans, sans-serif);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+}
+
+/* Orbit stays above the portrait */
+
+.hero-orbit {
+  z-index: 3;
+}
+
+/* Orbit moved up (desktop/tablet) so it sits over the hair, not the forehead.
+   More up -> increase the number (e.g. -120px). Less up -> -60px. */
+
+@media (min-width: 768px) {
+  .hero .hero-orbit {
+    margin-top: -90px;
+  }
+}
+
+/* If the "IDEAS INTO IMPACT" label ends up on the face, uncomment this: */
+/* .hero .orbit-label { display: none; } */
+
+/* Hero buttons */
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 28px;
+}
+
+.hero-action-link {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.hero-action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 14px 26px;
+
+  border-radius: 999px;
+
+  background: transparent;
+  color: white;
+
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+
+  cursor: pointer;
+
+  transition: color 0.3s ease;
+}
+
+.hero-action-button:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+
+  /* RESPONSIVE PORTRAIT */
+
+
+@media (max-width: 900px) {
+  .hero-visual {
+    width: 52%;
+  }
+
+  .hero-portrait {
+    width: 42vw;
+    height: 65vh;
+    right: 0;
+  }
+
+  .portrait-caption {
+    top: auto;
+    left: auto;
+    right: 25px;
+    bottom: 25px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-visual {
+    position: relative;
+
+    width: 100%;
+    height: 480px;
+
+    top: auto;
+    right: auto;
+
+    margin-top: 35px;
+  }
+
+  .hero-portrait {
+    position: absolute;
+
+    top: 50%;
+    right: auto;
+
+    width: min(90vw, 420px);
+    height: 460px;
+
+    transform: translateY(-50%);
+  }
+
+  .hero-portrait-image,
+  .hero-portrait img {
+    object-position: center 25%;
+  }
+
+  .hero-orbit {
+    width: 190px;
+    right: 5%;
+    top: 2%;
+  }
+
+  .portrait-caption {
+    top: auto;
+    left: auto;
+    right: 30px;
+    bottom: 30px;
+  }
 }
 
 .hero-bottom {
@@ -729,6 +969,43 @@ img {
   gap: 10px;
   color: #777;
 }
+
+
+/* =========================================
+   HERO TITLE - size / spacing fix
+   (title rules are not in this file, so this overrides them)
+========================================= */
+
+.hero .hero-copy {
+  /* Longest line is "CODE WITH" (9 chars). Smaller = less overlap with portrait.
+     Bigger text -> raise 10.4vw (e.g. 11vw). Smaller text -> lower it (e.g. 9.5vw). */
+  --hero-title-size: clamp(48px, 10.4vw, 200px);
+}
+
+.hero .hero-copy h1,
+.hero .hero-copy .title-mask,
+.hero .hero-copy .hero-title-line {
+  font-size: var(--hero-title-size);
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+}
+
+.hero .hero-copy .hero-title-line {
+  white-space: nowrap;
+}
+
+/* Outline word: a little more space so the strokes don't overlap */
+.hero .hero-copy .title-outline {
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 767px) {
+  .hero .hero-copy {
+    --hero-title-size: clamp(40px, 16vw, 110px);
+  }
+}
+
+
 
 /* =========================================
    05. MANIFESTO
