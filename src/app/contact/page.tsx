@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Mail, Linkedin, Github, CheckCircle2 } from "lucide-react";
 import { site } from "@/data/site";
-import HCaptcha from "@hcaptcha/react-hcaptcha"; // hCaptcha import kiya
+import Link from "next/link";
 
 const InteractiveMap = () => {
   return (
@@ -27,20 +27,11 @@ const InteractiveMap = () => {
 export default function ContactPage() {
   const [status, setStatus] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
   
-  // Captcha token state
-  const [captchaToken, setCaptchaToken] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Captcha validation check
-    if (!captchaToken) {
-      setStatus("Error: Please solve the Captcha first!");
-      return;
-    }
-
     setIsSubmitting(true);
     setStatus("Sending...");
 
@@ -49,9 +40,6 @@ export default function ContactPage() {
     
     // YAHAN APNI WEB3FORMS KI ACCESS KEY DAALNA
     formData.append("access_key", "13a362e5-db95-48d2-9770-64acf9b02521"); 
-    
-    // Backend ko Captcha response bhejna
-    formData.append("h-captcha-response", captchaToken);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -64,7 +52,6 @@ export default function ContactPage() {
       if (data.success) {
         setStatus("Message sent successfully!");
         form.reset();
-        setCaptchaToken(""); // Captcha clear karna
       } else {
         setStatus("Something went wrong. Please try again.");
       }
@@ -83,10 +70,6 @@ export default function ContactPage() {
     setTimeout(() => {
       setToastMessage("");
     }, 2500);
-  };
-
-  const onHCaptchaChange = (token: string) => {
-    setCaptchaToken(token);
   };
 
   return (
@@ -169,7 +152,6 @@ export default function ContactPage() {
               Send a direct inquiry through this form. Every message sent from here is delivered straight to my personal inbox. Whether you have a project in mind, a collaboration proposal, or just want to say hello, I'd love to hear from you.
             </p>
             
-            {/* EMAIL, PHONE, AND SOCIAL ICONS ALL IN ONE ROW */}
             <div className="contact-details" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '24px' }}>
               <button 
                 onClick={() => handleCopy("ankitsinghtanwar2008@gmail.com", "Mail")}
@@ -243,16 +225,6 @@ export default function ContactPage() {
               <div className="form-group">
                 <label htmlFor="message">Message</label>
                 <textarea id="message" name="message" placeholder="Type your message here" rows={5} required ></textarea>
-              </div>
-
-              {/* hCaptcha Integration - Submit Button ke upar */}
-              <div className="form-group" style={{ marginBottom: "20px" }}>
-                <HCaptcha
-                  sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
-                  reCaptchaCompat={false}
-                  onVerify={onHCaptchaChange}
-                  theme="dark"
-                />
               </div>
 
               <button type="submit" disabled={isSubmitting} className="submit-button">
