@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Mail } from "lucide-react";
+import { Mail, Linkedin, Github, CheckCircle2 } from "lucide-react";
 import { site } from "@/data/site";
 import Link from "next/link";
 
@@ -9,18 +9,16 @@ const InteractiveMap = () => {
   return (
     <div className="contact-map-container">
        <div className="map-image-wrapper">
-          {/* Radial mask se map background me blend hoga */}
-          <div className="map-fade-overlay"></div>
-          <img src="/images/world-map.png" alt="World Map" className="world-map-image" />
-          
-          {/* Location Marker with beam and glowing dot */}
-          <div className="map-marker" style={{ top: '55%', left: '68%' }}>
-             <div className="marker-label">We are here</div>
-             <div className="marker-beam"></div>
-             <div className="marker-dot">
-                <div className="marker-pulse"></div>
-             </div>
-          </div>
+         <div className="map-fade-overlay"></div>
+         <img src="/images/world-map.png" alt="World Map" className="world-map-image" />
+         
+         <div className="map-marker" style={{ top: '55%', left: '68%' }}>
+            <div className="marker-label">We are here</div>
+            <div className="marker-beam"></div>
+            <div className="marker-dot">
+               <div className="marker-pulse"></div>
+            </div>
+         </div>
        </div>
     </div>
   );
@@ -29,7 +27,8 @@ const InteractiveMap = () => {
 export default function ContactPage() {
   const [status, setStatus] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [location, setLocation] = useState("");
+  
+  const [toastMessage, setToastMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,7 +52,6 @@ export default function ContactPage() {
       if (data.success) {
         setStatus("Message sent successfully!");
         form.reset();
-        setLocation("");
       } else {
         setStatus("Something went wrong. Please try again.");
       }
@@ -65,12 +63,83 @@ export default function ContactPage() {
     }
   };
 
+  const handleCopy = (text: string, type: string) => {
+    navigator.clipboard.writeText(text);
+    setToastMessage(`${type} Copied!`);
+    
+    setTimeout(() => {
+      setToastMessage("");
+    }, 2500);
+  };
+
   return (
     <div className="contact-page-wrapper">
+      
+      <style dangerouslySetInnerHTML={{__html: `
+        .toast-popup {
+          position: fixed;
+          bottom: 30px;
+          right: 30px;
+          background: #ffffff;
+          color: #000000;
+          padding: 12px 24px;
+          border-radius: 8px;
+          font-size: 13px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          z-index: 1000;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+          animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideIn {
+          from { transform: translateY(20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        .copy-link {
+          background: none;
+          border: none;
+          color: inherit;
+          font: inherit;
+          cursor: pointer;
+          padding: 0;
+          transition: color 0.2s;
+        }
+        .copy-link:hover {
+          color: #ffffff;
+          text-decoration: underline;
+        }
+        .social-circle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 50%;
+          color: #a3a29b;
+          transition: all 0.3s ease;
+          background: transparent;
+        }
+        .social-circle:hover {
+          background: rgba(255,255,255,0.1);
+          border-color: rgba(255,255,255,0.3);
+          color: #ffffff;
+          transform: translateY(-2px);
+        }
+      `}} />
+
+      {toastMessage && (
+        <div className="toast-popup">
+          <CheckCircle2 size={16} color="#000" />
+          {toastMessage}
+        </div>
+      )}
+
       <section className="contact-section pt-32">
         <div className="contact-container">
           
-          {/* Left Side: Info & Map */}
           <div className="contact-info-panel">
             <div className="contact-icon-wrapper">
               <Mail size={20} color="#3b82f6" strokeWidth={2.5} />
@@ -83,16 +152,53 @@ export default function ContactPage() {
               Send a direct inquiry through this form. Every message sent from here is delivered straight to my personal inbox. Whether you have a project in mind, a collaboration proposal, or just want to say hello, I'd love to hear from you.
             </p>
             
-            <div className="contact-details">
-              <a href={`mailto:${site.email}`}>{site.email}</a>
+            {/* EMAIL, PHONE, AND SOCIAL ICONS ALL IN ONE ROW */}
+            <div className="contact-details" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '24px' }}>
+              <button 
+                onClick={() => handleCopy("ankitsinghtanwar2008@gmail.com", "Mail")}
+                className="copy-link"
+                title="Click to copy email"
+              >
+                ankitsinghtanwar2008@gmail.com
+              </button>
+              
               <span className="dot-separator">•</span>
-              <span>+91 7851056138</span>
+              
+              <button 
+                onClick={() => handleCopy("7851056138", "Contact No.")}
+                className="copy-link"
+                title="Click to copy phone number"
+              >
+                +91 7851056138
+              </button>
+
+              <span className="dot-separator" style={{ margin: '0 4px', opacity: 0.5 }}>|</span>
+
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <a 
+                  href="https://www.linkedin.com/in/ankit-singh-71a6a133a/" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="social-circle"
+                  title="LinkedIn Profile"
+                >
+                  <Linkedin size={14} />
+                </a>
+                <a 
+                  href="https://github.com/ankitsinghtanwar2008" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="social-circle"
+                  title="GitHub Profile"
+                >
+                  <Github size={14} />
+                </a>
+              </div>
             </div>
 
             <InteractiveMap />
           </div>
 
-          {/* Right Side: Form */}
           <div className="contact-form-panel">
             <div className="form-grid-background"></div>
             <form onSubmit={handleSubmit} className="contact-form">
@@ -107,13 +213,11 @@ export default function ContactPage() {
                 <input type="email" id="email" name="email" placeholder="support@aceternity.com" required />
               </div>
 
-              {/* NAYA FIELD: Mobile Number */}
               <div className="form-group">
                 <label htmlFor="mobile">Mobile Number <span className="optional-text">(Optional)</span></label>
                 <input type="tel" id="mobile" name="mobile" placeholder="+91 00000 00000" />
               </div>
 
-              {/* COMPANY FIELD (Optional likha hua) */}
               <div className="form-group">
                 <label htmlFor="company">Company <span className="optional-text">(Optional)</span></label>
                 <input type="text" id="company" name="company" placeholder="Aceternity Labs LLC" />

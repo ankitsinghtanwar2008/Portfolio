@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { site } from "@/data/site";
+import { Linkedin, Github } from "lucide-react"; // Icons import kar liye
 
 export default function Contact() {
   const [status, setStatus] = useState("");
@@ -70,13 +71,42 @@ export default function Contact() {
                 +91 7851056138
               </a>
             </div>
+
+            {/* Naya SOCIAL block add kiya hai */}
+            <div className="detail-block">
+              <span className="detail-label">SOCIAL</span>
+              <div className="social-links" style={{ display: 'flex', gap: '16px', marginTop: '4px' }}>
+                <a 
+                  href="https://www.linkedin.com/in/ankit-singh-71a6a133a/" 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="contact-link social-icon"
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '50%', transition: 'all 0.3s ease' }}
+                  onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; }}
+                  onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+                >
+                  <Linkedin size={20} />
+                </a>
+                <a 
+                  href="https://github.com/ankitsinghtanwar2008" 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="contact-link social-icon"
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '50%', transition: 'all 0.3s ease' }}
+                  onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; }}
+                  onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+                >
+                  <Github size={20} />
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
 
         {/* RIGHT COLUMN: FLAT FORM WITH GRID BACKGROUND */}
         <div className="inquiry-right">
           
-          {/* YAHAN GRID BACKGROUND ADD KIYA HAI */}
           <div className="inquiry-grid-bg"></div>
           
           <div className="form-top-bar">
